@@ -11,6 +11,9 @@ public class Board : MonoBehaviour
     [SerializeField] GameObject[] gamePiecePrefabs;
     Tile[,] m_allTiles = null;// Tile 스크립트를 2차원 배열로 선언  -> 대괄호 안에 ','가 없으면 1차원 배열
     GamePiece[,] m_allGamePiece;
+
+    Tile m_clickedTile;
+    Tile m_targetTile;
     private void Awake()
     {
         m_allTiles = new Tile[width, height];
@@ -82,5 +85,37 @@ public class Board : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void ClickTile(Tile tile)
+    {
+        if(m_clickedTile == null)
+            m_clickedTile = tile;
+
+        Debug.Log("clicked tile: " + tile.name);
+    }
+
+    public void DragToTile(Tile tile)
+    {
+        if(m_clickedTile != null)
+        {
+            m_targetTile = tile;
+            Debug.Log("Target tile: " + tilePrefabs.name);
+        }
+    }
+    public void ReleaseTile()
+    {
+        if(m_clickedTile != null && m_targetTile != null)
+        {
+            SwitchTiles(m_clickedTile, m_targetTile);
+        }
+    }
+
+    private void SwitchTiles(Tile clickedTile, Tile targetTile)
+    {
+        //두개 gamepiece를 교체
+
+        m_clickedTile = null;
+        m_targetTile = null;
     }
 }
