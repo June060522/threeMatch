@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class GamePiece : MonoBehaviour
 {
-    [SerializeField] int xIndex;
-    [SerializeField] int yIndex;
+    [SerializeField] public int xIndex;
+    [SerializeField] public int yIndex;
+
+    Board m_board;
 
     private bool isMoving;
 
     [SerializeField] InterpType interpolation = InterpType.EaseIn;
+
     public enum InterpType
     {
         Linear,
@@ -18,16 +21,35 @@ public class GamePiece : MonoBehaviour
         SmoothStep,
         SmootherStep
     };
+
+    public enum MatchValue
+    {
+        Red,
+        Blue,
+        Yellow,
+        Green,
+        Magenta,
+        Cyan,
+        Teal,
+        Wild
+    };
+    public MatchValue matchValue;
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            Move((int)Mathf.Round(transform.position.x) + 1, (int)transform.position.y, 0.5f);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            Move((int)Mathf.Round(transform.position.x) - 1, (int)transform.position.y, 0.5f);
-        }
+        //if (Input.GetKeyDown(KeyCode.RightArrow))
+        //{
+        //    Move((int)Mathf.Round(transform.position.x) + 1, (int)transform.position.y, 0.5f);
+        //}
+        //if (Input.GetKeyDown(KeyCode.LeftArrow))
+        //{
+        //    Move((int)Mathf.Round(transform.position.x) - 1, (int)transform.position.y, 0.5f);
+        //}
+    }
+
+    public void Init(Board board)
+    {
+        m_board = board;
     }
 
     public void SetCoord(int x, int y)
@@ -36,7 +58,7 @@ public class GamePiece : MonoBehaviour
         yIndex = y;
     }
 
-    private void Move(int dextX, int dextY, float timeToMove)
+    public void Move(int dextX, int dextY, float timeToMove)
     {
         if (!isMoving)
         {
@@ -55,20 +77,24 @@ public class GamePiece : MonoBehaviour
             if (Vector3.Distance(transform.position, destination) < 0.01f) // 목적지에 도착하면
             {
                 reachedDestination = true;
-                transform.position = destination;
+                if (m_board != null)
+                {
+                    m_board.PlaceGamePiece(this, (int)destination.x, (int)destination.y);
+                }
+                //transform.position = destination;
                 SetCoord((int)destination.x, (int)destination.y);
             }
 
 
             elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp(elapsedTime / timeToMove,0,1);
+            float t = Mathf.Clamp(elapsedTime / timeToMove, 0, 1);
 
-            switch(interpolation)
+            switch (interpolation)
             {
                 case InterpType.Linear:
                     break;
                 case InterpType.EaseIn:
-                    t = 1- Mathf.Cos(t * Mathf.PI * 0.5f);// ease in(천천 - 보통)
+                    t = 1 - Mathf.Cos(t * Mathf.PI * 0.5f);// ease in(천천 - 보통)
                     break;
                 case InterpType.EaseOut:
                     t = Mathf.Sin(t * Mathf.PI * 0.5f);// ease out(보통-천천)

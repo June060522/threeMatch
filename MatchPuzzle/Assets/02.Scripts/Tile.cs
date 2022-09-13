@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField] int xIndex;
-    [SerializeField] int yIndex;
+    [SerializeField]public int xIndex;
+    [SerializeField]public int yIndex;
     Board m_board;
 
     public void Init(int x, int y, Board board)
