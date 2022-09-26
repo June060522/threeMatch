@@ -2,12 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TileType
+{
+    Normal,
+    Obstacle
+}
 public class Tile : MonoBehaviour
 {
     [SerializeField]public int xIndex;
     [SerializeField]public int yIndex;
     Board m_board;
 
+    public TileType tileType = TileType.Normal;
     public void Init(int x, int y, Board board)
     {
         xIndex = x;
