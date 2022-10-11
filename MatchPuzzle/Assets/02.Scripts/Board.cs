@@ -11,10 +11,14 @@ public class Board : MonoBehaviour
     [SerializeField] GameObject tileNormalPrefabs;
     [SerializeField] GameObject tileObstaclePrefabs;
     [SerializeField] GameObject[] gamePiecePrefabs;
+
+    [SerializeField] GameObject adjacentBombPrefab;
+    [SerializeField] GameObject rowBombPrefab;
+    [SerializeField] GameObject columnBombPrefab;
     Tile[,] m_allTiles = null;
     GamePiece[,] m_allGamePiece;
 
-    private float swapTime = 0.5f;
+    public float swapTime = 0.5f;
 
     private bool m_playerInputEnable = true;
 
@@ -45,8 +49,8 @@ public class Board : MonoBehaviour
     {
         m_allTiles = new Tile[width, height];
         m_allGamePiece = new GamePiece[width, height];
-        SetupTiles();
         SetupGamePiece();
+        SetupTiles();
         SetupCamera();
         FillBoard(10, 0.5f);
         //HighlightMatches();
@@ -171,6 +175,8 @@ public class Board : MonoBehaviour
     {
         List<GamePiece> leftMatches = FindMatches(x, y, Vector2.left, minLength);
         List<GamePiece> downMatches = FindMatches(x, y, Vector2.down, minLength);
+        List<GamePiece> rightMatches = FindMatches(x, y, Vector2.right, minLength);
+        List<GamePiece> upMatches = FindMatches(x, y, Vector2.up, minLength);
 
         if (leftMatches == null)
         {
@@ -180,8 +186,16 @@ public class Board : MonoBehaviour
         {
             downMatches = new List<GamePiece>();
         }
+        if (upMatches == null)
+        {
+            upMatches = new List<GamePiece>();
+        }
+        if (rightMatches == null)
+        {
+            rightMatches = new List<GamePiece>();
+        }
 
-        return (leftMatches.Count > 0 || downMatches.Count > 0);
+        return (leftMatches.Count > 0 || downMatches.Count > 0 || rightMatches.Count > 0 || upMatches.Count > 0);
     }
 
     private GamePiece FillRandomAt(int x, int y, int falseOffset = 0, float moveTime = 0.1f)
@@ -191,6 +205,19 @@ public class Board : MonoBehaviour
             GameObject randomPiece = Instantiate(GetRandomGamePiece(), Vector3.zero, Quaternion.identity);
             MakeGamePiece(randomPiece, x, y, falseOffset, moveTime);
             return randomPiece.GetComponent<GamePiece>();
+        }
+        return null;
+    }
+
+    GameObject MakeBomb(GameObject prefab, int x, int y)
+    {
+        if(prefab != null && isWithinBounds(x,y))
+        {
+            GameObject bomb = Instantiate(prefab, new Vector3(x,y,0), Quaternion.identity);
+            bomb.GetComponent<Bomb>().Init(this);
+            bomb.GetComponent<Bomb>().SetCoord(x,y);
+            bomb.transform.parent = transform;
+            return bomb;
         }
         return null;
     }
@@ -652,6 +679,9 @@ public class Board : MonoBehaviour
 
         while (!isFinished)
         {
+            List<GamePiece> bombedPieces = GetBombedPieces(gamePiece);
+            gamePiece = gamePiece.Union(bombedPieces).ToList();
+
             ClearPieceAt(gamePiece);
             BreakTileAt(gamePiece);
             yield return new WaitForSeconds(0.25f);
@@ -692,5 +722,86 @@ public class Board : MonoBehaviour
                     return false;
         }
         return true;
+    }
+
+    List<GamePiece> GetRowPieces(int row)
+    {
+        List<GamePiece> gamePieces = new List<GamePiece>();
+
+        for (int i = 0; i < width; i++)
+        {
+            if (m_allGamePiece[i, row] != null)
+            {
+                gamePieces.Add(m_allGamePiece[i, row]);
+            }
+        }
+
+        return gamePieces;
+    }
+
+    List<GamePiece> GetColumnPieces(int column)
+    {
+        List<GamePiece> gamePieces = new List<GamePiece>();
+
+        for (int i = 0; i < height; i++)
+        {
+            if (m_allGamePiece[column, i] != null)
+            {
+                gamePieces.Add(m_allGamePiece[column, i]);
+            }
+        }
+
+        return gamePieces;
+    }
+
+    List<GamePiece> GetAdjacentPieces(int x, int y, int offset = 1)
+    {
+        List<GamePiece> gamePieces = new List<GamePiece>();
+
+        for (int i = x - offset; i <= x + offset; i++)
+        {
+            for (int j = y - offset; j <= y + offset; j++)
+            {
+                if (isWithinBounds(i, j))
+                {
+                    gamePieces.Add(m_allGamePiece[i, j]);
+                }
+            }
+        }
+        return gamePieces;
+    }
+
+    List<GamePiece> GetBombedPieces(List<GamePiece> gamePieces)
+    {
+        List<GamePiece> allPiecedToClear = new List<GamePiece>();
+
+        foreach (GamePiece piece in gamePieces)
+        {
+            if (piece != null)
+            {
+                List<GamePiece> piecesToClear = new List<GamePiece>();
+
+                Bomb bomb = piece.GetComponent<Bomb>();
+                if (bomb != null)
+                {
+                    switch (bomb.bombType)
+                    {
+                        case BombType.Column:
+                            piecesToClear = GetColumnPieces(bomb.xIndex);
+                            break;
+                        case BombType.Row:
+                            piecesToClear = GetRowPieces(bomb.yIndex);
+                            break;
+                        case BombType.Adjacent:
+                            piecesToClear = GetAdjacentPieces(bomb.xIndex, bomb.yIndex, 1);
+                            break;
+                        case BombType.Color:
+                            break;
+                    }
+                    allPiecedToClear = allPiecedToClear.Union(piecesToClear).ToList();
+                }
+            }
+        }
+        return allPiecedToClear;
     }
 }
