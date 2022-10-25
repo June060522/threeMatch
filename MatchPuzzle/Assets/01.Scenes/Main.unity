@@ -223,6 +223,7 @@ MonoBehaviour:
   clearFXPrefab: {fileID: 1885081940369358269, guid: b14cf23dad622ef4b9974725629333fb, type: 3}
   breakFXPrefab: {fileID: 1885081940369358269, guid: 4a535bd367bd63748ad63d116365d551, type: 3}
   doubleBreakFXPrefab: {fileID: 1885081940369358269, guid: 50850b1f4568631439c9b0b2aac563d6, type: 3}
+  bombFXPrefab: {fileID: 1885081940369358269, guid: babbde4b3fa34c44388c0a36bb3c961d, type: 3}
 --- !u!4 &495229166
 Transform:
   m_ObjectHideFlags: 0
@@ -466,6 +467,7 @@ MonoBehaviour:
   adjacentBombPrefab: {fileID: 8265466959529886262, guid: 93ee32e92fe41ad40b5df6cea5c57189, type: 3}
   rowBombPrefab: {fileID: 8265466959529886262, guid: 7787f86f1bbfac54f8f3b257dcf9c47f, type: 3}
   columnBombPrefab: {fileID: 8265466959529886262, guid: 0494bf4012dcf4e4fbb0823fcd627ab6, type: 3}
+  colorBombPrefab: {fileID: 8265466959529886262, guid: 7ce29161946537f499aa252647555bc0, type: 3}
   swapTime: 0.5
   startingTiles:
   - Prefab: {fileID: 2876765842836550234, guid: fc7314ab1ed5be141a338ee35d155746, type: 3}
@@ -485,33 +487,13 @@ MonoBehaviour:
     y: 4
     z: 0
   startingGamePieces:
-  - Prefab: {fileID: 1395135120326019098, guid: 05de8a8e9713a3a4aa419eb40303988a, type: 3}
+  - Prefab: {fileID: 8265466959529886262, guid: 7ce29161946537f499aa252647555bc0, type: 3}
     x: 3
     y: 3
     z: 0
-  - Prefab: {fileID: 1395135120326019098, guid: 05de8a8e9713a3a4aa419eb40303988a, type: 3}
+  - Prefab: {fileID: 8265466959529886262, guid: 7ce29161946537f499aa252647555bc0, type: 3}
     x: 3
     y: 4
-    z: 0
-  - Prefab: {fileID: 1395135120326019098, guid: 05de8a8e9713a3a4aa419eb40303988a, type: 3}
-    x: 3
-    y: 6
-    z: 0
-  - Prefab: {fileID: 1395135120326019098, guid: 05de8a8e9713a3a4aa419eb40303988a, type: 3}
-    x: 4
-    y: 5
-    z: 0
-  - Prefab: {fileID: 1395135120326019098, guid: 05de8a8e9713a3a4aa419eb40303988a, type: 3}
-    x: 5
-    y: 4
-    z: 0
-  - Prefab: {fileID: 1395135120326019098, guid: 05de8a8e9713a3a4aa419eb40303988a, type: 3}
-    x: 6
-    y: 4
-    z: 0
-  - Prefab: {fileID: 1395135120326019098, guid: 05de8a8e9713a3a4aa419eb40303988a, type: 3}
-    x: 5
-    y: 5
     z: 0
 --- !u!4 &1429660762
 Transform:

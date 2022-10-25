@@ -2,6 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+    public enum MatchValue
+    {
+        Red,
+        Blue,
+        Yellow,
+        Green,
+        Magenta,
+        Cyan,
+        Teal,
+        Wild
+    };
 public class GamePiece : MonoBehaviour
 {
     [SerializeField] public int xIndex;
@@ -22,17 +33,6 @@ public class GamePiece : MonoBehaviour
         SmootherStep
     };
 
-    public enum MatchValue
-    {
-        Red,
-        Blue,
-        Yellow,
-        Green,
-        Magenta,
-        Cyan,
-        Teal,
-        Wild
-    };
     public MatchValue matchValue;
 
     private void Update()
