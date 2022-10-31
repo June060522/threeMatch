@@ -11,7 +11,8 @@ using UnityEngine;
         Magenta,
         Cyan,
         Teal,
-        Wild
+        Wild,
+        None
     };
 public class GamePiece : MonoBehaviour
 {
