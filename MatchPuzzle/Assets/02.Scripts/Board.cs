@@ -31,6 +31,8 @@ public class Board : MonoBehaviour
     GameObject m_targetTileBomb;
 
     public float swapTime = 0.5f;
+    public int falseYOffset = 10;
+    public float moveTime = 0.5f;
 
     Tile m_clickedTile;
     Tile m_targetTile;
@@ -63,8 +65,12 @@ public class Board : MonoBehaviour
         m_allGamePiece = new GamePiece[width, height];
         SetupGamePiece();
         SetupTiles();
+
+        List<GamePiece> startingCollectibles = FindAllCollectibles();
+        collectibleCount = startingCollectibles.Count;
+
         SetupCamera();
-        FillBoard(10, 0.5f);
+        FillBoard(falseYOffset, moveTime);
         //HighlightMatches();
     }
 
@@ -391,7 +397,6 @@ public class Board : MonoBehaviour
                         {
                             clickedBombPiece.ChangeColor(targetPiece);
                         }
-                        clickedBombPiece.ChangeColor(targetPiece);
                     }
                     if (m_targetTileBomb != null && clickedPiece != null)
                     {
@@ -400,7 +405,6 @@ public class Board : MonoBehaviour
                         {
                             targetBombPiece.ChangeColor(clickedPiece);
                         }
-                        targetBombPiece.ChangeColor(clickedPiece);
                     }
 
 
@@ -787,7 +791,11 @@ public class Board : MonoBehaviour
             bombedPieces = GetBombedPieces(gamePiece);
             gamePiece = gamePiece.Union(bombedPieces).ToList();
 
-            List<GamePiece> collectedPieces = FindCollectiblesAt(0);
+            List<GamePiece> collectedPieces = FindCollectiblesAt(0, true);
+
+            List<GamePiece> allCollectibles = FindAllCollectibles();
+            List<GamePiece> blockers = gamePiece.Intersect(allCollectibles).ToList();
+            collectedPieces = collectedPieces.Union(blockers).ToList();
             collectibleCount -= collectedPieces.Count;
 
             gamePiece = gamePiece.Union(collectedPieces).ToList();
@@ -817,7 +825,7 @@ public class Board : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
 
             matches = FindMatchesAt(movingPieces);
-            collectedPieces = FindCollectiblesAt(0);
+            collectedPieces = FindCollectiblesAt(0,true);
             matches = matches.Union(collectedPieces).ToList();
 
             if (matches.Count == 0)
@@ -833,7 +841,7 @@ public class Board : MonoBehaviour
 
     IEnumerator RefillRoutine()
     {
-        FillBoard(10, 0.5f);
+        FillBoard(falseYOffset, moveTime);
         yield return null;
     }
 
@@ -1046,7 +1054,7 @@ public class Board : MonoBehaviour
         return false;
     }
 
-    List<GamePiece> FindCollectiblesAt(int row)
+    List<GamePiece> FindCollectiblesAt(int row, bool clearAtBottomOnly = false)
     {
         List<GamePiece> foundCollectible = new List<GamePiece>();
         for (int i = 0; i < width; i++)
@@ -1057,7 +1065,8 @@ public class Board : MonoBehaviour
 
                 if (collectibleComponent)
                 {
-                    foundCollectible.Add(m_allGamePiece[i, row]);
+                    if(!clearAtBottomOnly || (clearAtBottomOnly && collectibleComponent.clearedAtBottom))
+                        foundCollectible.Add(m_allGamePiece[i, row]);
                 }
             }
         }

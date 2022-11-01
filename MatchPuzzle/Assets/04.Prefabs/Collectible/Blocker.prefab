@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3582883231653888291}
   - component: {fileID: 5603199933167884663}
   m_Layer: 0
-  m_Name: Collectible
+  m_Name: Blocker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c80e503b3d38b8b4b8c36edd73cf6bed, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0b7dd22ee8c2de741abbd05500173ea5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -101,5 +101,5 @@ MonoBehaviour:
   yIndex: 0
   interpolation: 1
   matchValue: 8
-  clearedByBomb: 0
-  clearedAtBottom: 1
+  clearedByBomb: 1
+  clearedAtBottom: 0
