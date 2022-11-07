@@ -41,6 +41,7 @@ public class Board : MonoBehaviour
     public StartingObject[] startingGamePieces;
 
     private bool m_playerInputEnable = true;
+    private int m_scoreMultiplierm = 1;
 
     ParticleManager m_particleManager;
     [System.Serializable]
@@ -651,14 +652,22 @@ public class Board : MonoBehaviour
             if (piece != null)
             {
                 ClearPieceAt(piece.xIndex, piece.yIndex);
+                
+                int bonus = 0;
+                if(gamePieces.Count >= 4)
+                    bonus = 20;
 
+                piece.ScorePoints(m_scoreMultiplierm,bonus);
                 if (m_particleManager != null)
                 {
                     if (bombedPieces.Contains(piece))
                     {
                         m_particleManager.BombFXAt(piece.xIndex, piece.yIndex);
                     }
-                    m_particleManager.ClearPieceFXAt(piece.xIndex, piece.yIndex);
+                    else
+                    {
+                        m_particleManager.ClearPieceFXAt(piece.xIndex, piece.yIndex);
+                    }
                 }
             }
 
@@ -762,8 +771,10 @@ public class Board : MonoBehaviour
         m_playerInputEnable = false;
         List<GamePiece> matches = gamePiece;
 
+        m_scoreMultiplierm = 0;
         do
         {
+            m_scoreMultiplierm++;
             yield return StartCoroutine(ClearAndCollapseRoutine(matches));
             yield return null;
             yield return StartCoroutine(RefillRoutine());
@@ -834,7 +845,10 @@ public class Board : MonoBehaviour
                 break;
             }
             else
+            {
+                m_scoreMultiplierm++;
                 yield return StartCoroutine(ClearAndCollapseRoutine(matches));
+            }
         }
         yield return null;
     }
