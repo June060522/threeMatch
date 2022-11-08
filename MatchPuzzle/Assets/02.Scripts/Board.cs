@@ -53,17 +53,15 @@ public class Board : MonoBehaviour
         public int z;
     }
 
-    private void Awake()
+    private void Start()
     {
         m_allTiles = new Tile[width, height];
         m_allGamePiece = new GamePiece[width, height];
         m_particleManager = FindObjectOfType<ParticleManager>();
     }
 
-    private void Start()
+    public void SetUpBoard()
     {
-        m_allTiles = new Tile[width, height];
-        m_allGamePiece = new GamePiece[width, height];
         SetupGamePiece();
         SetupTiles();
 
@@ -72,7 +70,6 @@ public class Board : MonoBehaviour
 
         SetupCamera();
         FillBoard(falseYOffset, moveTime);
-        //HighlightMatches();
     }
 
     public void SetupTiles()
@@ -387,6 +384,8 @@ public class Board : MonoBehaviour
                 }
                 else
                 {
+                    GameManager.Instance.movesLeft--;
+                    GameManager.Instance.UpdateMoves();
                     Vector2 swapDirection = new Vector2(targetTile.xIndex - clickedTile.xIndex, targetTile.yIndex - clickedTile.yIndex);
                     m_clickedTileBomb = DropBomb(clickedTile.xIndex, clickedTile.yIndex, swapDirection, clickedPieceMatches);
                     m_targetTileBomb = DropBomb(targetTile.xIndex, targetTile.yIndex, swapDirection, targetPieceMatches);
@@ -652,12 +651,12 @@ public class Board : MonoBehaviour
             if (piece != null)
             {
                 ClearPieceAt(piece.xIndex, piece.yIndex);
-                
+
                 int bonus = 0;
-                if(gamePieces.Count >= 4)
+                if (gamePieces.Count >= 4)
                     bonus = 20;
 
-                piece.ScorePoints(m_scoreMultiplierm,bonus);
+                piece.ScorePoints(m_scoreMultiplierm, bonus);
                 if (m_particleManager != null)
                 {
                     if (bombedPieces.Contains(piece))
@@ -836,7 +835,7 @@ public class Board : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
 
             matches = FindMatchesAt(movingPieces);
-            collectedPieces = FindCollectiblesAt(0,true);
+            collectedPieces = FindCollectiblesAt(0, true);
             matches = matches.Union(collectedPieces).ToList();
 
             if (matches.Count == 0)
@@ -1079,7 +1078,7 @@ public class Board : MonoBehaviour
 
                 if (collectibleComponent)
                 {
-                    if(!clearAtBottomOnly || (clearAtBottomOnly && collectibleComponent.clearedAtBottom))
+                    if (!clearAtBottomOnly || (clearAtBottomOnly && collectibleComponent.clearedAtBottom))
                         foundCollectible.Add(m_allGamePiece[i, row]);
                 }
             }
@@ -1104,12 +1103,12 @@ public class Board : MonoBehaviour
         List<GamePiece> collectiblePieces = FindAllCollectibles();
         List<GamePiece> piecesToRemove = new List<GamePiece>();
 
-        foreach(GamePiece piece in collectiblePieces)
+        foreach (GamePiece piece in collectiblePieces)
         {
             Collectable collectibleComponent = piece.GetComponent<Collectable>();
-            if(collectibleComponent != null)
+            if (collectibleComponent != null)
             {
-                if(!collectibleComponent.clearedByBomb)
+                if (!collectibleComponent.clearedByBomb)
                 {
                     piecesToRemove.Add(piece);
                 }
