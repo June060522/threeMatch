@@ -5,7 +5,7 @@ using TMPro;
 
 public class ScoreManager : Singleton<ScoreManager>
 {
-    int m_currentScore = 0;
+    public int m_currentScore = 0;
     int m_counterValue = 0;
     int m_increment = 5;
 

@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public int movesLeft = 30;
-    public int scroeGoal = 10000;
+    public int scroeGoal = 1000;
 
     public ScreenFader screenFader;
     public TextMeshProUGUI levelNameText;
@@ -17,13 +17,19 @@ public class GameManager : Singleton<GameManager>
     bool m_isReadyToBegin = false;
     bool m_isGameOver = false;
     bool m_isWinner = false;
+    bool m_isReadyToReload = false;
 
     Board m_board;
+
+    public MessageWindow messageWindow;
+    public Sprite winIcom;
+    public Sprite loseIcon;
+    public Sprite goalIcon;
     private void Start()
     {
         m_board = FindObjectOfType<Board>();
         Scene scene = SceneManager.GetActiveScene();
-        if(levelNameText != null)
+        if (levelNameText != null)
         {
             levelNameText.text = scene.name;
         }
@@ -33,7 +39,7 @@ public class GameManager : Singleton<GameManager>
 
     public void UpdateMoves()
     {
-        if(movesLeftText != null)
+        if (movesLeftText != null)
             movesLeftText.text = movesLeft.ToString();
     }
 
@@ -44,46 +50,80 @@ public class GameManager : Singleton<GameManager>
         yield return StartCoroutine("EndGameRoutine");
     }
 
+    public void BiginGame()
+    {
+        m_isReadyToBegin = true;
+    }
+
     IEnumerator StartGameRoutine()
     {
-        while(!m_isReadyToBegin)
+        if (messageWindow != null)
+        {
+            messageWindow.GetComponent<RectXformMover>().MoveOn();
+            messageWindow.ShowMessage(goalIcon, "score goal\n" + scroeGoal.ToString(), "start");
+        }
+        while (!m_isReadyToBegin)
         {
             yield return null;
-            yield return new WaitForSeconds(2f);
-            m_isReadyToBegin = true;
         }
         screenFader?.FadeOff();
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
         m_board?.SetUpBoard();
     }
 
     IEnumerator PlayGameRoutine()
     {
-        while(!m_isGameOver)
+        while (!m_isGameOver)
         {
-            if(movesLeft == 0)
+            if(ScoreManager.Instance.m_currentScore >= scroeGoal)
+            {
+                m_isGameOver = true;
+                m_isWinner = true;
+            }
+            else if (movesLeft == 0)
             {
                 m_isGameOver = true;
                 m_isWinner = false;
             }
+
             yield return null;
         }
     }
 
     IEnumerator EndGameRoutine()
     {
-        screenFader?.FadeOn()
-        if(m_isWinner)
+        m_isReadyToReload = false;
+        if (m_isWinner)
         {
-            Debug.Log($"You Wun!!");
+            if (messageWindow != null)
+            {
+                messageWindow.GetComponent<RectXformMover>().MoveOn();
+                messageWindow.ShowMessage(winIcom, "You win", "Okay");
+            }
         }
         else
         {
-            Debug.Log($"You Lose!!");
+            if (messageWindow != null)
+            {
+                messageWindow.GetComponent<RectXformMover>().MoveOn();
+                messageWindow.ShowMessage(loseIcon, "You lose", "Okay");
+            }
         }
-        yield return null;
+        screenFader?.FadeOn();
+
+        while(!m_isReadyToReload)
+        {
+            yield return null;
+        }
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void ReloadScene()
+    {
+        m_isReadyToReload = true;
     }
 
 }
