@@ -187,6 +187,8 @@ MonoBehaviour:
   yIndex: 0
   interpolation: 1
   matchValue: 1
+  clearSound: {fileID: 8300000, guid: 3235eb35ca4de45b9901ea9ccbff8d77, type: 3}
+  scoreValue: 20
   bombType: 1
 --- !u!1001 &215248224661757871
 PrefabInstance:

@@ -5,7 +5,8 @@ using TMPro;
 
 public class ScoreManager : Singleton<ScoreManager>
 {
-    public int m_currentScore = 0;
+    public int Score => m_currentScore;
+    int m_currentScore = 0;
     int m_counterValue = 0;
     int m_increment = 5;
 
@@ -30,7 +31,8 @@ public class ScoreManager : Singleton<ScoreManager>
         m_currentScore += value;
         StartCoroutine(CountScoreRoutine());
     }
-
+// if(SoundManager.Instance != null)
+//             SoundManager.Instance.PlayRandomMusic();
     IEnumerator CountScoreRoutine()
     {
         int iterations = 0;

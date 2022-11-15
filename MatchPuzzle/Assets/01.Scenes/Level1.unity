@@ -349,6 +349,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 186750556}
   m_CullTransparentMesh: 1
+--- !u!1 &260644555
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 260644557}
+  - component: {fileID: 260644556}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &260644556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260644555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4d318a14a7dd5840b11375a6e06a5d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicCilps:
+  - {fileID: 8300000, guid: e75e89afb6e1648e7a4a2ac64328a7c0, type: 3}
+  - {fileID: 8300000, guid: e5e029a21fda14206a9ff1423a1302a9, type: 3}
+  winClips:
+  - {fileID: 8300000, guid: 5f9fb0bfcf06e4304aab13b97645fe13, type: 3}
+  - {fileID: 8300000, guid: b43b2e7180aa04f788c269504edc72de, type: 3}
+  loseClips:
+  - {fileID: 8300000, guid: ed4ad50d33af142e6be4b65f4d37e37c, type: 3}
+  bonusClips:
+  - {fileID: 8300000, guid: 8743038399aa64c5db230df6c26f4b71, type: 3}
+  musicVolume: 0.5
+  fxVolume: 0.5
+  lowPitch: 0.95
+  highPitch: 1.05
+--- !u!4 &260644557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260644555}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &389884896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,7 +1102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f42f80235029944a4ce0b6e0deda14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_currentScore: 0
   scoreText: {fileID: 2137048640}
   countTime: 1
 --- !u!4 &787265509
@@ -1382,7 +1439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movesLeft: 20
-  scroeGoal: 1000
+  scroeGoal: 10000
   screenFader: {fileID: 1224393665}
   levelNameText: {fileID: 761442334}
   movesLeftText: {fileID: 728005070}

@@ -654,7 +654,10 @@ public class Board : MonoBehaviour
 
                 int bonus = 0;
                 if (gamePieces.Count >= 4)
+                {
+                    //SoundManager.Instance.PlayBonusSound();
                     bonus = 20;
+                }
 
                 piece.ScorePoints(m_scoreMultiplierm, bonus);
                 if (m_particleManager != null)
@@ -845,6 +848,8 @@ public class Board : MonoBehaviour
             }
             else
             {
+                if(SoundManager.Instance != null)
+                    SoundManager.Instance.PlayBonusSound();
                 m_scoreMultiplierm++;
                 yield return StartCoroutine(ClearAndCollapseRoutine(matches));
             }
@@ -1021,6 +1026,8 @@ public class Board : MonoBehaviour
                     }
                 }
             }
+            if(SoundManager.Instance != null)
+            SoundManager.Instance.PlayBonusSound();
         }
 
         return bomb;

@@ -77,10 +77,13 @@ public class GameManager : Singleton<GameManager>
     {
         while (!m_isGameOver)
         {
-            if(ScoreManager.Instance.m_currentScore >= scroeGoal)
+            if (ScoreManager.Instance != null)
             {
-                m_isGameOver = true;
-                m_isWinner = true;
+                if (ScoreManager.Instance.Score >= scroeGoal)
+                {
+                    m_isGameOver = true;
+                    m_isWinner = true;
+                }
             }
             else if (movesLeft == 0)
             {
@@ -99,6 +102,8 @@ public class GameManager : Singleton<GameManager>
         {
             if (messageWindow != null)
             {
+                if (SoundManager.Instance != null)
+                    SoundManager.Instance.PlayWinSound();
                 messageWindow.GetComponent<RectXformMover>().MoveOn();
                 messageWindow.ShowMessage(winIcom, "You win", "Okay");
             }
@@ -107,18 +112,21 @@ public class GameManager : Singleton<GameManager>
         {
             if (messageWindow != null)
             {
+                if (SoundManager.Instance != null)
+                    SoundManager.Instance.PlayLoseSound();
                 messageWindow.GetComponent<RectXformMover>().MoveOn();
                 messageWindow.ShowMessage(loseIcon, "You lose", "Okay");
             }
         }
         screenFader?.FadeOn();
 
-        while(!m_isReadyToReload)
+        while (!m_isReadyToReload)
         {
             yield return null;
         }
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
     }
 
     public void ReloadScene()
