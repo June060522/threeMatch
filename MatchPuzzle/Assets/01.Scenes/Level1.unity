@@ -1439,7 +1439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movesLeft: 20
-  scroeGoal: 10000
+  scroeGoal: 5000
   screenFader: {fileID: 1224393665}
   levelNameText: {fileID: 761442334}
   movesLeftText: {fileID: 728005070}
@@ -1701,16 +1701,35 @@ MonoBehaviour:
   - {fileID: 1370378229521206352, guid: ec600273a98df6445936a5ecc78b4474, type: 3}
   - {fileID: 2995459367910658008, guid: 8865ede9b4cdd2e468c30a9a6db980f5, type: 3}
   - {fileID: 2601083498622938614, guid: 10020d2c0f84d134aae1d1d479f31c1e, type: 3}
-  adjacentBombPrefab: {fileID: 8265466959529886262, guid: 93ee32e92fe41ad40b5df6cea5c57189, type: 3}
-  rowBombPrefab: {fileID: 8265466959529886262, guid: 7787f86f1bbfac54f8f3b257dcf9c47f, type: 3}
-  columnBombPrefab: {fileID: 8265466959529886262, guid: 0494bf4012dcf4e4fbb0823fcd627ab6, type: 3}
+  adjacentBombPrefab:
+  - {fileID: 8265466959529886262, guid: 93ee32e92fe41ad40b5df6cea5c57189, type: 3}
+  - {fileID: 8265466959529886262, guid: 340daa3a1a5bffa47a1cae15508538e7, type: 3}
+  - {fileID: 8265466959529886262, guid: e426defe22ad40e4db255c5145aa4448, type: 3}
+  - {fileID: 8265466959529886262, guid: 1d1873f7c934a7848b9d6c5df30ae0ff, type: 3}
+  - {fileID: 8265466959529886262, guid: 60c5e28798c18ff448ba81f8e4320212, type: 3}
+  - {fileID: 8265466959529886262, guid: d3f4a5be15da72f4db4192d55c50c5d4, type: 3}
+  - {fileID: 8265466959529886262, guid: d506341d0969009409b3efd36379bde9, type: 3}
+  rowBombPrefab:
+  - {fileID: 8265466959529886262, guid: 7787f86f1bbfac54f8f3b257dcf9c47f, type: 3}
+  - {fileID: 8265466959529886262, guid: 948abaf5912fe794aa5c32c36088c09b, type: 3}
+  - {fileID: 8265466959529886262, guid: 67e79894c633537489f61448769b60d1, type: 3}
+  - {fileID: 8265466959529886262, guid: 72f8ff54bdb158e408f0b89487be86b3, type: 3}
+  - {fileID: 8265466959529886262, guid: a8f0bbfd7ffaf5f47a9a905c284c808e, type: 3}
+  - {fileID: 8265466959529886262, guid: 55a62a377c6d4d944a6266b3ad2b8bc4, type: 3}
+  - {fileID: 8265466959529886262, guid: 521ecddffb1b54641a6bb3029ab229ea, type: 3}
+  columnBombPrefab:
+  - {fileID: 8265466959529886262, guid: b4341c2f34194e94c9bbd102658eee7e, type: 3}
+  - {fileID: 8265466959529886262, guid: 7cbc2cdb49922ce40b69248585dbe64f, type: 3}
+  - {fileID: 8265466959529886262, guid: 19ecca85f8ea9414aaefc1fe291ffcc3, type: 3}
+  - {fileID: 8265466959529886262, guid: 3fabf38d1ade3f940adc02014395842d, type: 3}
+  - {fileID: 8265466959529886262, guid: 0494bf4012dcf4e4fbb0823fcd627ab6, type: 3}
+  - {fileID: 8265466959529886262, guid: 03cdc37df0d2cf1468991bff92bfe8d6, type: 3}
+  - {fileID: 8265466959529886262, guid: 5acadb1d90bc0ba4bb8b8361fee01f3c, type: 3}
   colorBombPrefab: {fileID: 8265466959529886262, guid: 7ce29161946537f499aa252647555bc0, type: 3}
   maxCollectibles: 3
   collectibleCount: 0
   changeForCollectible: 0.288
-  collectiblePrefabs:
-  - {fileID: 8265466959529886262, guid: b6b5e01dfa175fa49bc1ddbe7e16ef83, type: 3}
-  - {fileID: 8265466959529886262, guid: ed5b026fa4ff6f34182ed76f0de9de90, type: 3}
+  collectiblePrefabs: []
   swapTime: 0.5
   falseYOffset: 10
   moveTime: 0.5
@@ -1719,27 +1738,7 @@ MonoBehaviour:
     x: 4
     y: 4
     z: 0
-  startingGamePieces:
-  - Prefab: {fileID: 8265466959529886262, guid: 899ed130aed2b1c4b85e06752ecb4cb2, type: 3}
-    x: 4
-    y: 4
-    z: 0
-  - Prefab: {fileID: 1395135120326019098, guid: 05de8a8e9713a3a4aa419eb40303988a, type: 3}
-    x: 4
-    y: 3
-    z: 0
-  - Prefab: {fileID: 1395135120326019098, guid: 05de8a8e9713a3a4aa419eb40303988a, type: 3}
-    x: 4
-    y: 6
-    z: 0
-  - Prefab: {fileID: 1395135120326019098, guid: 05de8a8e9713a3a4aa419eb40303988a, type: 3}
-    x: 4
-    y: 7
-    z: 0
-  - Prefab: {fileID: 1395135120326019098, guid: 05de8a8e9713a3a4aa419eb40303988a, type: 3}
-    x: 3
-    y: 5
-    z: 0
+  startingGamePieces: []
 --- !u!4 &1429660762
 Transform:
   m_ObjectHideFlags: 0
@@ -1883,14 +1882,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.22895753, g: 0.067141324, b: 0.38679248, a: 1}
+  m_Color: {r: 0.49412602, g: 0.6027037, b: 0.754717, a: 0.49803922}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 25e01f2191c25f94e9302309d6f9f7eb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

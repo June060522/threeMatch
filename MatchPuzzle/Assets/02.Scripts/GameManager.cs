@@ -85,7 +85,7 @@ public class GameManager : Singleton<GameManager>
                     m_isWinner = true;
                 }
             }
-            else if (movesLeft == 0)
+            if (movesLeft <= 0)
             {
                 m_isGameOver = true;
                 m_isWinner = false;

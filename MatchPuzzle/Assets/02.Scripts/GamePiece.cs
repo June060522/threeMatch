@@ -10,6 +10,8 @@ using UnityEngine;
         Green,
         Magenta,
         Cyan,
+        Puple,
+        Orange,
         Teal,
         Wild,
         None
