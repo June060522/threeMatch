@@ -16,6 +16,7 @@ public class GameManager : Singleton<GameManager>
 
     bool m_isReadyToBegin = false;
     bool m_isGameOver = false;
+    public bool M_isGameOver {get => m_isGameOver; set => m_isGameOver = value;}
     bool m_isWinner = false;
     bool m_isReadyToReload = false;
 
@@ -77,18 +78,21 @@ public class GameManager : Singleton<GameManager>
     {
         while (!m_isGameOver)
         {
-            if (ScoreManager.Instance != null)
+            if(m_board.isRefilling)
             {
-                if (ScoreManager.Instance.Score >= scroeGoal)
+                if (ScoreManager.Instance != null)
+                {
+                    if (ScoreManager.Instance.Score >= scroeGoal)
+                    {
+                        m_isGameOver = true;
+                        m_isWinner = true;
+                    }
+                }
+                if (movesLeft <= 0)
                 {
                     m_isGameOver = true;
-                    m_isWinner = true;
+                    m_isWinner = false;
                 }
-            }
-            if (movesLeft <= 0)
-            {
-                m_isGameOver = true;
-                m_isWinner = false;
             }
 
             yield return null;

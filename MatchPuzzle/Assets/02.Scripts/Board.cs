@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+[RequireComponent(typeof(BoardDeadlock))]
 public class Board : MonoBehaviour
 {
     [SerializeField] int width;
@@ -43,7 +44,11 @@ public class Board : MonoBehaviour
     private bool m_playerInputEnable = true;
     private int m_scoreMultiplierm = 1;
 
+    public bool isRefilling = false;
+
     ParticleManager m_particleManager;
+    BoardDeadlock m_boardDeadlock;
+
     [System.Serializable]
     public class StartingObject
     {
@@ -58,6 +63,7 @@ public class Board : MonoBehaviour
         m_allTiles = new Tile[width, height];
         m_allGamePiece = new GamePiece[width, height];
         m_particleManager = FindObjectOfType<ParticleManager>();
+        m_boardDeadlock = GetComponent<BoardDeadlock>();
     }
 
     public void SetUpBoard()
@@ -337,7 +343,7 @@ public class Board : MonoBehaviour
 
     IEnumerator SwitchTilesRoutine(Tile clickedTile, Tile targetTile)
     {
-        if (m_playerInputEnable)
+        if (m_playerInputEnable && !GameManager.Instance.M_isGameOver)
         {
             GamePiece clickedPiece = m_allGamePiece[clickedTile.xIndex, clickedTile.yIndex];
             GamePiece targetPiece = m_allGamePiece[targetTile.xIndex, targetTile.yIndex];
@@ -384,6 +390,7 @@ public class Board : MonoBehaviour
                 }
                 else
                 {
+                    isRefilling = false;
                     GameManager.Instance.movesLeft--;
                     GameManager.Instance.UpdateMoves();
                     Vector2 swapDirection = new Vector2(targetTile.xIndex - clickedTile.xIndex, targetTile.yIndex - clickedTile.yIndex);
@@ -785,6 +792,7 @@ public class Board : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         } while (matches.Count != 0);
         m_playerInputEnable = true;
+        isRefilling = true;
     }
 
     IEnumerator ClearAndCollapseRoutine(List<GamePiece> gamePiece)

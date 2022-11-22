@@ -1438,7 +1438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79595abc80fda440b0c8cec9b03e313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movesLeft: 20
+  movesLeft: 2
   scroeGoal: 5000
   screenFader: {fileID: 1224393665}
   levelNameText: {fileID: 761442334}
@@ -1739,6 +1739,7 @@ MonoBehaviour:
     y: 4
     z: 0
   startingGamePieces: []
+  isRefilling: 0
 --- !u!4 &1429660762
 Transform:
   m_ObjectHideFlags: 0
