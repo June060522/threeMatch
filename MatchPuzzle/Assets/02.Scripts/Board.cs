@@ -711,7 +711,8 @@ public class Board : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                ClearPieceAt(i, j);
+                ClearPieceAt(i, j);                
+                m_particleManager.ClearPieceFXAt(i,j);
             }
         }
     }
@@ -791,6 +792,15 @@ public class Board : MonoBehaviour
             matches = FindAllMatches();
             yield return new WaitForSeconds(0.5f);
         } while (matches.Count != 0);
+        if (m_boardDeadlock.IsDeadlocked(m_allGamePiece, 3))
+        {
+            yield return new WaitForSeconds(3f);
+            List<GamePiece> collectables = FindAllCollectibles();
+            collectibleCount -= collectables.Count;
+            ClearBoard();
+            yield return new WaitForSeconds(1f);
+            StartCoroutine(RefillRoutine());
+        }
         m_playerInputEnable = true;
         isRefilling = true;
     }
@@ -1164,5 +1174,10 @@ public class Board : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public void TestDeadlock()
+    {
+        m_boardDeadlock.IsDeadlocked(m_allGamePiece, 3);
     }
 }
