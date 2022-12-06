@@ -257,6 +257,7 @@ public class Board : MonoBehaviour
                 }
             }
         }
+//        ClearAndRefillBoardRoutine(m_allGamePiece);
     }
 
     bool CanAddCollectible()
@@ -427,7 +428,7 @@ public class Board : MonoBehaviour
                 else
                 {
                     isRefilling = false;
-                    GameManager.Instance.movesLeft--;
+                    //LevelGoal.Instance.movesLeft--;
                     GameManager.Instance.UpdateMoves();
                     Vector2 swapDirection = new Vector2(targetTile.xIndex - clickedTile.xIndex, targetTile.yIndex - clickedTile.yIndex);
                     m_clickedTileBomb = DropBomb(clickedTile.xIndex, clickedTile.yIndex, swapDirection, clickedPieceMatches);
@@ -702,7 +703,7 @@ public class Board : MonoBehaviour
                     bonus = 20;
                 }
 
-                piece.ScorePoints(m_scoreMultiplierm, bonus);
+                GameManager.Instance.ScorePoints(piece,m_scoreMultiplierm, bonus);
                 if (m_particleManager != null)
                 {
                     if (bombedPieces.Contains(piece))
