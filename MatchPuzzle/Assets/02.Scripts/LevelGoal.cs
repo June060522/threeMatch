@@ -10,6 +10,8 @@ public abstract class LevelGoal : Singleton<LevelGoal>
 
     public int movesLeft = 30;
 
+    public int timeLeft = 60;
+
     private void Start()
     {
         Init();
@@ -38,7 +40,7 @@ public abstract class LevelGoal : Singleton<LevelGoal>
         return scoreGoals.Length;
     }
 
-    public  void UpdateScoreStars(int score)
+    public void UpdateScoreStars(int score)
     {
         scoreStars = UpdateScore(score);
     }

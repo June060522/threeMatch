@@ -6,10 +6,11 @@ public class ParticlePlayer : MonoBehaviour
 {
     public ParticleSystem[] allParticles;
     public float lifeTime = 1f;
+    public bool desrtoyImmediately = true;
     private void Start()
     {
         allParticles = GetComponentsInChildren<ParticleSystem>();
-        Destroy(gameObject,lifeTime);
+        if(desrtoyImmediately) Destroy(gameObject,lifeTime);
     }        
 
     public void Play()
@@ -19,5 +20,6 @@ public class ParticlePlayer : MonoBehaviour
             p.Stop();
             p.Play();
         }
+        Destroy(gameObject,lifeTime);
     }
 }

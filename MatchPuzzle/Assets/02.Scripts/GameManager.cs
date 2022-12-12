@@ -17,24 +17,30 @@ public class GameManager : Singleton<GameManager>
     bool m_isReadyToBegin = false;
     bool m_isGameOver = false;
     public bool M_isGameOver { get => m_isGameOver; set => m_isGameOver = value; }
+    public ScoreMeter scoreMeter;
     bool m_isWinner = false;
     bool m_isReadyToReload = false;
 
     Board m_board;
     LevelGoal m_levelGoal;
+    LevelGoalTimed m_levelGoalTimed;
 
     public MessageWindow messageWindow;
     public Sprite winIcom;
     public Sprite loseIcon;
     public Sprite goalIcon;
+
     public override void Awake()
     {
         m_levelGoal = GetComponent<LevelGoal>();
-
         m_board = FindObjectOfType<Board>();
+        m_levelGoalTimed = GetComponent<LevelGoalTimed>();
     }
+
     private void Start()
     {
+        if(scoreMeter != null)
+            scoreMeter.SetUpstarts(m_levelGoal);
         Scene scene = SceneManager.GetActiveScene();
         if (levelNameText != null)
         {
@@ -47,9 +53,20 @@ public class GameManager : Singleton<GameManager>
 
     public void UpdateMoves()
     {
-        m_levelGoal.movesLeft--;
-        if (movesLeftText != null)
-            movesLeftText.text = m_levelGoal.movesLeft.ToString();
+        if(m_levelGoalTimed == null)
+        {
+            m_levelGoal.movesLeft--;
+            if (movesLeftText != null)
+                movesLeftText.text = m_levelGoal.movesLeft.ToString();
+        }
+        else
+        {
+            if(m_levelGoalTimed != null)
+            {
+                movesLeftText.text = "\u221E";
+                movesLeftText.fontSize = 70;
+            }
+        }
     }
 
     IEnumerator ExecuteGameLoop()
@@ -73,8 +90,10 @@ public class GameManager : Singleton<GameManager>
         }
         while (!m_isReadyToBegin)
         {
+            Debug.Log("123");
             yield return null;
         }
+        Debug.Log("123");
         screenFader?.FadeOff();
 
         yield return new WaitForSeconds(1f);
@@ -84,6 +103,11 @@ public class GameManager : Singleton<GameManager>
 
     IEnumerator PlayGameRoutine()
     {
+        if(m_levelGoalTimed != null)
+        {
+            m_levelGoalTimed.StartCountDown();
+        }
+
         while (!m_isGameOver)
         {
             m_isGameOver = m_levelGoal.IsGameOver();
@@ -98,6 +122,7 @@ public class GameManager : Singleton<GameManager>
         m_isReadyToReload = false;
         if (m_isWinner)
         {
+            yield return new WaitForSeconds(2f);
             if (messageWindow != null)
             {
                 if (SoundManager.Instance != null)
@@ -108,6 +133,7 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
+            yield return new WaitForSeconds(2f);
             if (messageWindow != null)
             {
                 if (SoundManager.Instance != null)
@@ -140,6 +166,10 @@ public class GameManager : Singleton<GameManager>
             {
                 ScoreManager.Instance.AddScore(piece.scoreValue * multiplier + bonus);
                 m_levelGoal.UpdateScoreStars(ScoreManager.Instance.Score);
+                if(scoreMeter != null)
+                {
+                    scoreMeter.UpdateScoreMeter(ScoreManager.Instance.Score,m_levelGoal.scoreStars);
+                }
             }
 
             if(SoundManager.Instance != null)

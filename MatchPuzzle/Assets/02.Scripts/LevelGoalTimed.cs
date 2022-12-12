@@ -2,8 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelGoalScored : LevelGoal
+public class LevelGoalTimed : LevelGoal
 {
+    public void StartCountDown()
+    {
+        StartCoroutine(CountDownRoutine());
+    }
+
+    IEnumerator CountDownRoutine()
+    {
+        while(timeLeft > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            timeLeft--;
+        }
+    }
+
     public override bool IsGameOver()
     {
         if(ScoreManager.Instance.Score >= scoreGoals[scoreGoals.Length - 1])
