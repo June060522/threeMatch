@@ -630,13 +630,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260644555}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_Father: {fileID: 1390994522}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &389884896
 GameObject:
@@ -2465,6 +2465,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1017307556}
+  - component: {fileID: 1017307557}
   m_Layer: 5
   m_Name: Timer
   m_TagString: Untagged
@@ -2494,6 +2495,25 @@ RectTransform:
   m_AnchoredPosition: {x: -33, y: 105}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1017307557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1017307555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ec84064ba35d76418ba0472e86b6639, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeLeftText: {fileID: 550494753}
+  clockImage: {fileID: 1406947403}
+  paused: 0
+  flashTimeLimit: 10
+  flashBeep: {fileID: 8300000, guid: 3235eb35ca4de45b9901ea9ccbff8d77, type: 3}
+  flashInterval: 1
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &1044481970
 GameObject:
   m_ObjectHideFlags: 0
@@ -2730,7 +2750,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1245345128}
   - component: {fileID: 1245345129}
-  - component: {fileID: 1245345130}
   - component: {fileID: 1245345131}
   m_Layer: 0
   m_Name: GameManager
@@ -2752,7 +2771,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1390994522}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1245345129
 MonoBehaviour:
@@ -2774,7 +2793,7 @@ MonoBehaviour:
   winIcom: {fileID: 21300000, guid: e724ee286c1cd83498b12ab963a91dff, type: 3}
   loseIcon: {fileID: 21300000, guid: 265a1b564e1386b4087c79e5dd9a5367, type: 3}
   goalIcon: {fileID: 21300000, guid: b6ecb4ca46140374ca4977dc38482f0b, type: 3}
---- !u!114 &1245345130
+--- !u!114 &1245345131
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2783,22 +2802,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1245345127}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f36ecf827edb89e4a9d31e613e3a85cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreStars: 0
-  scoreGoals: f4010000e8030000b0040000
-  movesLeft: 30
-  timeLeft: 60
---- !u!114 &1245345131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1245345127}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3f2fec1858a54b44953a7a03313da80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -2806,6 +2809,7 @@ MonoBehaviour:
   scoreGoals: e8030000d0070000b80b0000
   movesLeft: 30
   timeLeft: 20
+  timer: {fileID: 1017307557}
 --- !u!1 &1274952301
 GameObject:
   m_ObjectHideFlags: 0
@@ -3010,6 +3014,7 @@ Transform:
   m_Children:
   - {fileID: 495229166}
   - {fileID: 787265509}
+  - {fileID: 260644557}
   - {fileID: 1245345128}
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -3159,6 +3164,7 @@ GameObject:
   - component: {fileID: 1406947402}
   - component: {fileID: 1406947404}
   - component: {fileID: 1406947403}
+  - component: {fileID: 1406947405}
   m_Layer: 5
   m_Name: ClockBG (1)
   m_TagString: Untagged
@@ -3175,7 +3181,7 @@ RectTransform:
   m_GameObject: {fileID: 1406947401}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1672979232}
@@ -3224,6 +3230,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406947401}
   m_CullTransparentMesh: 1
+--- !u!114 &1406947405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406947401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63648c79cff135d48aa4b0fe1ee410cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  solidAlpha: 1
+  clearAlpha: 0
+  delay: 0
+  timeToFade: 1
 --- !u!1 &1421063439
 GameObject:
   m_ObjectHideFlags: 0
@@ -3784,6 +3806,7 @@ GameObject:
   - component: {fileID: 1672979232}
   - component: {fileID: 1672979234}
   - component: {fileID: 1672979233}
+  - component: {fileID: 1672979235}
   m_Layer: 5
   m_Name: ClockBG
   m_TagString: Untagged
@@ -3850,6 +3873,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1672979231}
   m_CullTransparentMesh: 1
+--- !u!114 &1672979235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672979231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63648c79cff135d48aa4b0fe1ee410cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  solidAlpha: 1
+  clearAlpha: 0
+  delay: 0
+  timeToFade: 1
 --- !u!1 &1849797656
 GameObject:
   m_ObjectHideFlags: 0

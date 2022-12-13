@@ -257,7 +257,7 @@ public class Board : MonoBehaviour
                 }
             }
         }
-//        ClearAndRefillBoardRoutine(m_allGamePiece);
+        //        ClearAndRefillBoardRoutine(m_allGamePiece);
     }
 
     bool CanAddCollectible()
@@ -702,8 +702,15 @@ public class Board : MonoBehaviour
                     //SoundManager.Instance.PlayBonusSound();
                     bonus = 20;
                 }
-
-                GameManager.Instance.ScorePoints(piece,m_scoreMultiplierm, bonus);
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.ScorePoints(piece, m_scoreMultiplierm, bonus);
+                    TimeBonus timebonus = GetComponent<TimeBonus>();
+                    if (timebonus != null)
+                    {
+                        GameManager.Instance.AddTime(GetComponent<TimeBonus>().bonusValue);
+                    }
+                }
                 if (m_particleManager != null)
                 {
                     if (bombedPieces.Contains(piece))
@@ -1230,7 +1237,7 @@ public class Board : MonoBehaviour
     {
         if (m_playerInputEnable)
         {
-            
+
         }
     }
 
@@ -1256,6 +1263,6 @@ public class Board : MonoBehaviour
 
         List<GamePiece> matches = FindAllMatches();
         StartCoroutine(ClearAndRefillBoardRoutine(matches));
-//
+        //
     }
 }

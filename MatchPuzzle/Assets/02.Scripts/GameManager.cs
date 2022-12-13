@@ -24,6 +24,7 @@ public class GameManager : Singleton<GameManager>
     Board m_board;
     LevelGoal m_levelGoal;
     LevelGoalTimed m_levelGoalTimed;
+    public LevelGoalTimed LevelGoalTimed {get; set;}
 
     public MessageWindow messageWindow;
     public Sprite winIcom;
@@ -35,6 +36,7 @@ public class GameManager : Singleton<GameManager>
         m_levelGoal = GetComponent<LevelGoal>();
         m_board = FindObjectOfType<Board>();
         m_levelGoalTimed = GetComponent<LevelGoalTimed>();
+        Debug.Log(m_levelGoalTimed);
     }
 
     private void Start()
@@ -73,6 +75,7 @@ public class GameManager : Singleton<GameManager>
     {
         yield return StartCoroutine("StartGameRoutine");
         yield return StartCoroutine("PlayGameRoutine");
+        yield return StartCoroutine("WaitForBoardRoutine",0.5f);
         yield return StartCoroutine("EndGameRoutine");
     }
 
@@ -90,10 +93,10 @@ public class GameManager : Singleton<GameManager>
         }
         while (!m_isReadyToBegin)
         {
-            Debug.Log("123");
+            //Debug.Log("123");
             yield return null;
         }
-        Debug.Log("123");
+        //Debug.Log("123");
         screenFader?.FadeOff();
 
         yield return new WaitForSeconds(1f);
@@ -117,29 +120,53 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    IEnumerator WaitForBoardRoutine(float delay = 0f)
+    {
+        if(m_levelGoalTimed != null && m_levelGoalTimed.timer)
+        {
+            m_levelGoalTimed.timer.FadeOff();
+            m_levelGoalTimed.timer.paused = true;
+        }
+
+        if(m_board != null)
+        {
+            yield return new WaitForSeconds(m_board.swapTime);
+
+            while (!m_board.isRefilling)
+            {
+                yield return null;
+            }
+        }
+        yield return new WaitForSeconds(delay);
+    }
+
     IEnumerator EndGameRoutine()
     {
         m_isReadyToReload = false;
         if (m_isWinner)
         {
-            yield return new WaitForSeconds(2f);
             if (messageWindow != null)
             {
-                if (SoundManager.Instance != null)
-                    SoundManager.Instance.PlayWinSound();
                 messageWindow.GetComponent<RectXformMover>().MoveOn();
-                messageWindow.ShowMessage(winIcom, "You win", "Okay");
+                messageWindow.ShowMessage(winIcom, "You win!", "ok");
+            }
+
+            if(SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlayWinSound();
             }
         }
         else
         {
-            yield return new WaitForSeconds(2f);
             if (messageWindow != null)
             {
-                if (SoundManager.Instance != null)
-                    SoundManager.Instance.PlayLoseSound();
                 messageWindow.GetComponent<RectXformMover>().MoveOn();
-                messageWindow.ShowMessage(loseIcon, "You lose", "Okay");
+                messageWindow.ShowMessage(loseIcon, "You lose", "Ok");
+            }
+
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlayLoseSound();
             }
         }
         screenFader?.FadeOn();
@@ -176,6 +203,13 @@ public class GameManager : Singleton<GameManager>
             {
                 SoundManager.Instance.PlayClipAtPoint(piece.clearSound,Vector3.zero,SoundManager.Instance.fxVolume);
             }
+        }
+    }
+    public void AddTime(int timeValue)
+    {
+        if(m_levelGoalTimed != null)
+        {
+            m_levelGoalTimed.AddTime(timeValue);
         }
     }
 }
