@@ -22,11 +22,14 @@ public class GameManager : Singleton<GameManager>
     bool m_isReadyToReload = false;
 
     Board m_board;
-    LevelGoal m_levelGoal;
-    LevelGoalTimed m_levelGoalTimed;
-    public LevelGoalTimed LevelGoalTimed {get; set;}
 
     public MessageWindow messageWindow;
+    LevelGoal m_levelGoal;
+    LevelGoalTimed m_levelGoalTimed;
+    public LevelGoalTimed LevelGoalTimed {get=> m_levelGoalTimed;}
+    Collectable collectable;
+    public LevelGoalCollected m_levlecollectionGoal;
+
     public Sprite winIcom;
     public Sprite loseIcon;
     public Sprite goalIcon;
@@ -36,7 +39,7 @@ public class GameManager : Singleton<GameManager>
         m_levelGoal = GetComponent<LevelGoal>();
         m_board = FindObjectOfType<Board>();
         m_levelGoalTimed = GetComponent<LevelGoalTimed>();
-        Debug.Log(m_levelGoalTimed);
+        m_levlecollectionGoal = GetComponent<LevelGoalCollected>();
     }
 
     private void Start()
@@ -210,6 +213,14 @@ public class GameManager : Singleton<GameManager>
         if(m_levelGoalTimed != null)
         {
             m_levelGoalTimed.AddTime(timeValue);
+        }
+    }
+
+    public void UpdateCollectionBoards(GamePiece piecetoCheck)
+    {
+        if(m_levlecollectionGoal != null)
+        {
+            m_levlecollectionGoal.UpdateGoals(piecetoCheck);
         }
     }
 }

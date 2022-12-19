@@ -397,6 +397,7 @@ public class Board : MonoBehaviour
                 List<GamePiece> targetPieceMatches = FindMatchesAt(targetTile.xIndex, targetTile.yIndex);
                 List<GamePiece> colorMatches = new List<GamePiece>();
 
+                #region ColorBomb
                 if (IsColorBomb(clickedPiece) && !IsColorBomb(targetPiece))
                 {
                     clickedPiece.matchValue = targetPiece.matchValue;
@@ -417,7 +418,7 @@ public class Board : MonoBehaviour
                         }
                     }
                 }
-
+                #endregion
                 if (clickedPieceMatches.Count == 0 && targetPieceMatches.Count == 0 && colorMatches.Count == 0)
                 {
                     clickedPiece.Move(clickedTile.xIndex, clickedTile.yIndex, swapTime);
@@ -429,7 +430,8 @@ public class Board : MonoBehaviour
                 {
                     isRefilling = false;
                     //LevelGoal.Instance.movesLeft--;
-                    GameManager.Instance.UpdateMoves();
+                    
+                    #region DropBomb
                     Vector2 swapDirection = new Vector2(targetTile.xIndex - clickedTile.xIndex, targetTile.yIndex - clickedTile.yIndex);
                     m_clickedTileBomb = DropBomb(clickedTile.xIndex, clickedTile.yIndex, swapDirection, clickedPieceMatches);
                     m_targetTileBomb = DropBomb(targetTile.xIndex, targetTile.yIndex, swapDirection, targetPieceMatches);
@@ -450,9 +452,13 @@ public class Board : MonoBehaviour
                             targetBombPiece.ChangeColor(clickedPiece);
                         }
                     }
-
-
-                    ClearAndRefillBoard(clickedPieceMatches.Union(targetPieceMatches).ToList().Union(colorMatches).ToList());
+                    #endregion
+                    List<GamePiece> pieceToClear = clickedPieceMatches.Union(targetPieceMatches).ToList().Union(colorMatches).ToList();
+                    yield return StartCoroutine(ClearAndRefillBoardRoutine(pieceToClear));
+                    if(GameManager.Instance != null)
+                    {
+                        GameManager.Instance.UpdateMoves();
+                    }
                 }
             }
         }
@@ -710,6 +716,7 @@ public class Board : MonoBehaviour
                     {
                         GameManager.Instance.AddTime(GetComponent<TimeBonus>().bonusValue);
                     }
+                    GameManager.Instance.UpdateCollectionBoards(piece);
                 }
                 if (m_particleManager != null)
                 {

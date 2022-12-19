@@ -37,7 +37,6 @@ public class ScoreStar : MonoBehaviour
         activeated = true;
         if(startFX != null)
         {
-            Debug.Log("123");
             startFX.Play();
         }
         if(SoundManager.Instance != null && startSound !=null)
