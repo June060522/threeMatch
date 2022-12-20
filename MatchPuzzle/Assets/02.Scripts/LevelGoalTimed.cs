@@ -4,29 +4,13 @@ using UnityEngine;
 
 public class LevelGoalTimed : LevelGoal
 {
-    public Timer timer;
-    int m_maxTime;
-
-    private void Start()
+    public override void Start()
     {
-        if(timer!=null)
+        levelCounter = LevelCounter.Timer;
+        base.Start();
+        if(UIManager.Instance.timer!=null && UIManager.Instance != null)
         {
-            timer.InitTimer(timeLeft);
-        }
-        m_maxTime = timeLeft;
-    }
-    public void StartCountDown()
-    {
-        StartCoroutine(CountDownRoutine());
-    }
-
-    IEnumerator CountDownRoutine()
-    {
-        while(timeLeft > 0)
-        {
-            yield return new WaitForSeconds(1f);
-            timeLeft--;
-            if(timer != null) timer.UpdateTimer(timeLeft);
+            UIManager.Instance.timer.InitTimer(timeLeft);
         }
     }
 
@@ -34,8 +18,7 @@ public class LevelGoalTimed : LevelGoal
     {
         int maxScore = scoreGoals[scoreGoals.Length - 1];
         if (ScoreManager.Instance.Score >= maxScore) return true;
-
-        return (timeLeft <= 0);
+        return (timeLeft < 0 );
     }
 
     public override bool IsWinner()
@@ -45,16 +28,5 @@ public class LevelGoalTimed : LevelGoal
             return ScoreManager.Instance.Score >= scoreGoals[0];
         }
         return false;
-    }
-
-    public void AddTime(int timeValue)
-    {
-        timeLeft += timeValue;
-        timeLeft = Mathf.Clamp(timeLeft,0,m_maxTime);
-
-        if(timer != null)
-        {
-            timer.UpdateTimer(timeLeft);
-        }
     }
 }

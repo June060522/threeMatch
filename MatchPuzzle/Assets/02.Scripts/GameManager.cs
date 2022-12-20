@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+//using TMPro;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
@@ -10,23 +10,17 @@ public class GameManager : Singleton<GameManager>
     // public int movesLeft = 30;
     // public int scroeGoal = 1000;
 
-    public ScreenFader screenFader;
-    public TextMeshProUGUI levelNameText;
-    public TextMeshProUGUI movesLeftText;
-
     bool m_isReadyToBegin = false;
     bool m_isGameOver = false;
     public bool M_isGameOver { get => m_isGameOver; set => m_isGameOver = value; }
-    public ScoreMeter scoreMeter;
     bool m_isWinner = false;
     bool m_isReadyToReload = false;
 
     Board m_board;
 
-    public MessageWindow messageWindow;
     LevelGoal m_levelGoal;
-    LevelGoalTimed m_levelGoalTimed;
-    public LevelGoalTimed LevelGoalTimed {get=> m_levelGoalTimed;}
+    //LevelGoalTimed m_levelGoalTimed;
+    public LevelGoal LevelGoalTimed {get=> m_levelGoal;}
     Collectable collectable;
     public LevelGoalCollected m_levlecollectionGoal;
 
@@ -38,39 +32,48 @@ public class GameManager : Singleton<GameManager>
     {
         m_levelGoal = GetComponent<LevelGoal>();
         m_board = FindObjectOfType<Board>();
-        m_levelGoalTimed = GetComponent<LevelGoalTimed>();
+        //m_levelGoalTimed = GetComponent<LevelGoalTimed>();
         m_levlecollectionGoal = GetComponent<LevelGoalCollected>();
     }
 
     private void Start()
     {
-        if(scoreMeter != null)
-            scoreMeter.SetUpstarts(m_levelGoal);
-        Scene scene = SceneManager.GetActiveScene();
-        if (levelNameText != null)
-        {
-            levelNameText.text = scene.name;
+        if(UIManager.Instance != null)
+        {            
+            if(UIManager.Instance.scoreMeter != null)
+                UIManager.Instance.scoreMeter.SetUpstarts(m_levelGoal);
+            Scene scene = SceneManager.GetActiveScene();
+            if (UIManager.Instance.levelNameText != null)
+            {
+                UIManager.Instance.levelNameText.text = scene.name;
+            }
+            if (m_levlecollectionGoal != null)
+            {
+                UIManager.Instance.SetupCollectionGoalLayout(m_levlecollectionGoal.collectionGoals);
+            }
+            else
+            {
+                UIManager.Instance.EnableCollectionGoalLayout(false);
+            }
+
+            bool useTime = (m_levelGoal.levelCounter == LevelCounter.Timer);
+
+            UIManager.Instance.EnableTimer(useTime);
+            UIManager.Instance.EnableMovesCounter(!useTime);
         }
         m_levelGoal.movesLeft++;
-        UpdateMoves();
         StartCoroutine(ExecuteGameLoop());
+        UpdateMoves();
     }
+    
 
     public void UpdateMoves()
     {
-        if(m_levelGoalTimed == null)
+        if(m_levelGoal.levelCounter == LevelCounter.Moves)
         {
             m_levelGoal.movesLeft--;
-            if (movesLeftText != null)
-                movesLeftText.text = m_levelGoal.movesLeft.ToString();
-        }
-        else
-        {
-            if(m_levelGoalTimed != null)
-            {
-                movesLeftText.text = "\u221E";
-                movesLeftText.fontSize = 70;
-            }
+            if (UIManager.Instance != null && UIManager.Instance.movesLeftText != null)
+                UIManager.Instance.movesLeftText.text = m_levelGoal.movesLeft.ToString();
         }
     }
 
@@ -89,10 +92,10 @@ public class GameManager : Singleton<GameManager>
 
     IEnumerator StartGameRoutine()
     {
-        if (messageWindow != null)
+        if (UIManager.Instance.messageWindow != null && UIManager.Instance != null)
         {
-            messageWindow.GetComponent<RectXformMover>().MoveOn();
-            messageWindow.ShowMessage(goalIcon, "score goal\n" + m_levelGoal.scoreGoals[0].ToString(), "start");
+            UIManager.Instance.messageWindow.GetComponent<RectXformMover>().MoveOn();
+            UIManager.Instance.messageWindow.ShowMessage(goalIcon, "score goal\n" + m_levelGoal.scoreGoals[0].ToString(), "start");
         }
         while (!m_isReadyToBegin)
         {
@@ -100,7 +103,8 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
         //Debug.Log("123");
-        screenFader?.FadeOff();
+        if(UIManager.Instance != null)
+            UIManager.Instance.screenFader?.FadeOff();
 
         yield return new WaitForSeconds(1f);
 
@@ -109,9 +113,9 @@ public class GameManager : Singleton<GameManager>
 
     IEnumerator PlayGameRoutine()
     {
-        if(m_levelGoalTimed != null)
+        if(m_levelGoal.levelCounter == LevelCounter.Timer)
         {
-            m_levelGoalTimed.StartCountDown();
+            m_levelGoal.StartCountDown();
         }
 
         while (!m_isGameOver)
@@ -125,10 +129,13 @@ public class GameManager : Singleton<GameManager>
 
     IEnumerator WaitForBoardRoutine(float delay = 0f)
     {
-        if(m_levelGoalTimed != null && m_levelGoalTimed.timer)
+        if(m_levelGoal.levelCounter == LevelCounter.Timer)
         {
-            m_levelGoalTimed.timer.FadeOff();
-            m_levelGoalTimed.timer.paused = true;
+            if(UIManager.Instance.timer != null && UIManager.Instance != null)
+            {
+                UIManager.Instance.timer.FadeOff();
+                UIManager.Instance.timer.paused = true;
+            }
         }
 
         if(m_board != null)
@@ -148,10 +155,10 @@ public class GameManager : Singleton<GameManager>
         m_isReadyToReload = false;
         if (m_isWinner)
         {
-            if (messageWindow != null)
+            if (UIManager.Instance.messageWindow != null && UIManager.Instance != null)
             {
-                messageWindow.GetComponent<RectXformMover>().MoveOn();
-                messageWindow.ShowMessage(winIcom, "You win!", "ok");
+                UIManager.Instance.messageWindow.GetComponent<RectXformMover>().MoveOn();
+                UIManager.Instance.messageWindow.ShowMessage(winIcom, "You win!", "ok");
             }
 
             if(SoundManager.Instance != null)
@@ -161,10 +168,10 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            if (messageWindow != null)
+            if (UIManager.Instance.messageWindow != null && UIManager.Instance != null)
             {
-                messageWindow.GetComponent<RectXformMover>().MoveOn();
-                messageWindow.ShowMessage(loseIcon, "You lose", "Ok");
+                UIManager.Instance.messageWindow.GetComponent<RectXformMover>().MoveOn();
+                UIManager.Instance.messageWindow.ShowMessage(loseIcon, "You lose", "Ok");
             }
 
             if (SoundManager.Instance != null)
@@ -172,7 +179,8 @@ public class GameManager : Singleton<GameManager>
                 SoundManager.Instance.PlayLoseSound();
             }
         }
-        screenFader?.FadeOn();
+        if(UIManager.Instance != null)
+           UIManager.Instance.screenFader?.FadeOn();
 
         while (!m_isReadyToReload)
         {
@@ -196,9 +204,9 @@ public class GameManager : Singleton<GameManager>
             {
                 ScoreManager.Instance.AddScore(piece.scoreValue * multiplier + bonus);
                 m_levelGoal.UpdateScoreStars(ScoreManager.Instance.Score);
-                if(scoreMeter != null)
+                if(UIManager.Instance.scoreMeter != null && UIManager.Instance != null)
                 {
-                    scoreMeter.UpdateScoreMeter(ScoreManager.Instance.Score,m_levelGoal.scoreStars);
+                    UIManager.Instance.scoreMeter.UpdateScoreMeter(ScoreManager.Instance.Score,m_levelGoal.scoreStars);
                 }
             }
 
@@ -210,9 +218,9 @@ public class GameManager : Singleton<GameManager>
     }
     public void AddTime(int timeValue)
     {
-        if(m_levelGoalTimed != null)
+        if(m_levelGoal.levelCounter == LevelCounter.Timer)
         {
-            m_levelGoalTimed.AddTime(timeValue);
+            m_levelGoal.AddTime(timeValue);
         }
     }
 
