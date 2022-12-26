@@ -24,10 +24,6 @@ public class GameManager : Singleton<GameManager>
     Collectable collectable;
     public LevelGoalCollected m_levlecollectionGoal;
 
-    public Sprite winIcom;
-    public Sprite loseIcon;
-    public Sprite goalIcon;
-
     public override void Awake()
     {
         m_levelGoal = GetComponent<LevelGoal>();
@@ -95,7 +91,21 @@ public class GameManager : Singleton<GameManager>
         if (UIManager.Instance.messageWindow != null && UIManager.Instance != null)
         {
             UIManager.Instance.messageWindow.GetComponent<RectXformMover>().MoveOn();
-            UIManager.Instance.messageWindow.ShowMessage(goalIcon, "score goal\n" + m_levelGoal.scoreGoals[0].ToString(), "start");
+            UIManager.Instance.messageWindow.ShowGoal(m_levelGoal.scoreGoals[m_levelGoal.scoreGoals.Length-1]);
+
+            if(m_levelGoal.levelCounter == LevelCounter.Timer)
+            {
+                UIManager.Instance.messageWindow.ShowTimeGoal(m_levelGoal.timeLeft);
+            }
+            else
+            {
+                UIManager.Instance.messageWindow.ShowMovesGoal(m_levelGoal.movesLeft -1);
+            }
+
+            if(m_levlecollectionGoal != null)
+            {
+
+            }
         }
         while (!m_isReadyToBegin)
         {
@@ -125,27 +135,28 @@ public class GameManager : Singleton<GameManager>
 
             yield return null;
         }
+        //yield return StartCoroutine("EndGameRoutine");
     }
 
     IEnumerator WaitForBoardRoutine(float delay = 0f)
     {
+        Debug.Log("1");
         if(m_levelGoal.levelCounter == LevelCounter.Timer)
         {
-            if(UIManager.Instance.timer != null && UIManager.Instance != null)
+            if(UIManager.Instance.timer != null)
             {
                 UIManager.Instance.timer.FadeOff();
                 UIManager.Instance.timer.paused = true;
             }
         }
-
         if(m_board != null)
         {
-            yield return new WaitForSeconds(m_board.swapTime);
-
             while (!m_board.isRefilling)
             {
+                Debug.Log("2");
                 yield return null;
             }
+            Debug.Log("3");
         }
         yield return new WaitForSeconds(delay);
     }
@@ -153,34 +164,35 @@ public class GameManager : Singleton<GameManager>
     IEnumerator EndGameRoutine()
     {
         m_isReadyToReload = false;
+
         if (m_isWinner)
         {
-            if (UIManager.Instance.messageWindow != null && UIManager.Instance != null)
+            if(UIManager.Instance.messageWindow != null)
             {
                 UIManager.Instance.messageWindow.GetComponent<RectXformMover>().MoveOn();
-                UIManager.Instance.messageWindow.ShowMessage(winIcom, "You win!", "ok");
-            }
+                UIManager.Instance.messageWindow.ShowWinMessage();
 
-            if(SoundManager.Instance != null)
-            {
-                SoundManager.Instance.PlayWinSound();
+                if (SoundManager.Instance != null)
+                {
+                    SoundManager.Instance.PlayWinSound();
+                }
             }
         }
         else
         {
-            if (UIManager.Instance.messageWindow != null && UIManager.Instance != null)
+            if(UIManager.Instance.messageWindow != null)
             {
                 UIManager.Instance.messageWindow.GetComponent<RectXformMover>().MoveOn();
-                UIManager.Instance.messageWindow.ShowMessage(loseIcon, "You lose", "Ok");
-            }
+                UIManager.Instance.messageWindow.ShowLoseMessage();
 
-            if (SoundManager.Instance != null)
-            {
-                SoundManager.Instance.PlayLoseSound();
+                if(SoundManager.Instance != null)
+                {
+                    SoundManager.Instance.PlayLoseSound();
+                }
             }
         }
-        if(UIManager.Instance != null)
-           UIManager.Instance.screenFader?.FadeOn();
+
+        if (UIManager.Instance.screenFader != null) UIManager.Instance.screenFader.FadeOn();
 
         while (!m_isReadyToReload)
         {
@@ -188,7 +200,6 @@ public class GameManager : Singleton<GameManager>
         }
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
     }
 
     public void ReloadScene()

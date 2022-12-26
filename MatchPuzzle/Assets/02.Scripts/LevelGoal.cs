@@ -12,7 +12,7 @@ public abstract class LevelGoal : Singleton<LevelGoal>
 {
     public int scoreStars = 0;
 
-    public int[] scoreGoals = new int[3] {1000,2000,3000};
+    public int[] scoreGoals = new int[3] { 1000, 2000, 3000 };
 
     public int movesLeft = 30;
 
@@ -22,13 +22,21 @@ public abstract class LevelGoal : Singleton<LevelGoal>
 
     int m_maxTime;
 
+
     public virtual void Start()
     {
         Init();
-        if(levelCounter == LevelCounter.Timer)
+        if (levelCounter == LevelCounter.Timer)
         {
             m_maxTime = timeLeft;
+
+            if (UIManager.Instance.timer != null && UIManager.Instance != null)
+            {
+                UIManager.Instance.timer.InitTimer(timeLeft);
+            }
+            
         }
+        
     }
 
     public void Init()
@@ -37,7 +45,7 @@ public abstract class LevelGoal : Singleton<LevelGoal>
 
         for (int i = 1; i < scoreGoals.Length; i++)
         {
-            if(scoreGoals[i] < scoreGoals[i - 1]) Debug.LogWarning("Level Setup score goals in increasing order!");
+            if (scoreGoals[i] < scoreGoals[i - 1]) Debug.LogWarning("Level Setup score goals in increasing order!");
         }
     }
 
@@ -45,7 +53,7 @@ public abstract class LevelGoal : Singleton<LevelGoal>
     {
         for (int i = 0; i < scoreGoals.Length; i++)
         {
-            if(score < scoreGoals[i])
+            if (score < scoreGoals[i])
             {
                 return i;
             }
@@ -67,20 +75,20 @@ public abstract class LevelGoal : Singleton<LevelGoal>
 
     IEnumerator CountDownRoutine()
     {
-        while(timeLeft > 0)
+        while (timeLeft > 0)
         {
             yield return new WaitForSeconds(1f);
             timeLeft--;
-            if(UIManager.Instance != null && UIManager.Instance.timer != null) 
+            if (UIManager.Instance != null && UIManager.Instance.timer != null)
                 UIManager.Instance.timer.UpdateTimer(timeLeft);
         }
     }
     public void AddTime(int timeValue)
     {
         timeLeft += timeValue;
-        timeLeft = Mathf.Clamp(timeLeft,0,m_maxTime);
+        timeLeft = Mathf.Clamp(timeLeft, 0, m_maxTime);
 
-        if(UIManager.Instance!= null && UIManager.Instance.timer != null)
+        if (UIManager.Instance != null && UIManager.Instance.timer != null)
         {
             UIManager.Instance.timer.UpdateTimer(timeLeft);
         }

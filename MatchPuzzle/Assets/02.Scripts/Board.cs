@@ -45,7 +45,7 @@ public class Board : MonoBehaviour
     private bool m_playerInputEnable = true;
     private int m_scoreMultiplierm = 1;
 
-    public bool isRefilling = false;
+    public bool isRefilling = true;
 
     ParticleManager m_particleManager;
     BoardDeadlock m_boardDeadlock;
@@ -428,7 +428,7 @@ public class Board : MonoBehaviour
                 }
                 else
                 {
-                    isRefilling = false;
+
                     //LevelGoal.Instance.movesLeft--;
                     
                     #region DropBomb
@@ -831,7 +831,7 @@ public class Board : MonoBehaviour
     {
         m_playerInputEnable = false;
         List<GamePiece> matches = gamePiece;
-
+        isRefilling = false;
         m_scoreMultiplierm = 0;
         do
         {
@@ -846,14 +846,14 @@ public class Board : MonoBehaviour
         if (m_boardDeadlock.IsDeadlocked(m_allGamePiece, 3))
         {
             yield return new WaitForSeconds(2f);
-            StartCoroutine(ShuffleBoardRoutine());
+            yield return StartCoroutine(ShuffleBoardRoutine());
 
 
             // List<GamePiece> collectables = FindAllCollectibles();
             // collectibleCount -= collectables.Count;
             // ClearBoard();
             yield return new WaitForSeconds(1f);
-            StartCoroutine(RefillRoutine());
+            yield return StartCoroutine(RefillRoutine());
         }
         m_playerInputEnable = true;
         isRefilling = true;

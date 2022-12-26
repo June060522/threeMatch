@@ -8,10 +8,7 @@ public class LevelGoalTimed : LevelGoal
     {
         levelCounter = LevelCounter.Timer;
         base.Start();
-        if(UIManager.Instance.timer!=null && UIManager.Instance != null)
-        {
-            UIManager.Instance.timer.InitTimer(timeLeft);
-        }
+        
     }
 
     public override bool IsGameOver()
