@@ -22,6 +22,10 @@ public class MessageWindow : MonoBehaviour
     public Sprite timerIcon;
     public Sprite movesIcon;
 
+    public Sprite goalCompleteIcon;
+    public Sprite goalFailedIcon;
+
+    public GameObject collectionGoalLayout;
 
     public void ShowMessage(Sprite sprite = null, string massage = "", string buttonMsg = "start")
     {
@@ -55,12 +59,35 @@ public class MessageWindow : MonoBehaviour
     {
         if(goalTxt != null && caption != "")
         {
-            goalTxt.text = caption;
+            ShowGoalCaption(caption);
         }
 
-        if(goalImage != null && icon != null)
+        if(goalImage != null)
         {
+            ShowGoalImage(icon);
+        }
+    }
+
+    public void ShowGoalCaption(string caption = "", int offsetX = 0, int offsetY = 0)
+    {
+        if(goalTxt != null)
+        {
+            goalTxt.text = caption;
+            RectTransform rectXform = goalTxt.GetComponent<RectTransform>();
+            rectXform.anchoredPosition += new Vector2(offsetX,offsetY);
+        }
+    }
+
+    public void ShowGoalImage(Sprite icon = null)
+    {
+        if(goalImage != null)
+        {
+            goalImage.gameObject.SetActive(true);
             goalImage.sprite = icon;
+        }
+        if(icon == null)
+        {
+            goalImage.gameObject.SetActive(false);
         }
     }
 
@@ -79,5 +106,17 @@ public class MessageWindow : MonoBehaviour
     public void ShowCollectionGoal()
     {
         ShowGoal("",goalIcon);
+    }
+
+    public void ShowCollectionGoal(bool state = true)
+    {
+        if(collectionGoalLayout != null)
+        {
+            collectionGoalLayout.SetActive(state);
+        }
+        if(state)
+        {
+            ShowGoal("",collectionIcon);
+        }
     }
 }
